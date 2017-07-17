@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeNetworkCall(){
 
-        Call<JsonObject> mlc = ((NetworkingApplication)getApplication()).getSearchApi().getSearchData("nike");
-        mlc.enqueue(new Callback<JsonObject>() {
+        Call<JsonObject> searchServiceCall = ((NetworkingApplication)getApplication()).getSearchApi().getSearchData("nike");
+        searchServiceCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
@@ -77,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d(MainActivity.class.getSimpleName(), t.getMessage().toString());
+                mProgressDialog.dismiss();
+                Toast.makeText(MainActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
         });
 
